@@ -24,7 +24,9 @@ export default {
   props:["accountId", "isSignedIn"],
   methods:{
     async login(){
-      await signIn();
+      if(!this.isSignedIn){
+        await signIn();
+      }
     },
     async signOut(){
       await signOut();
