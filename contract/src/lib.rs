@@ -1,20 +1,12 @@
 use near_sdk::{
-    env,
-    PromiseOrValue,
-    Promise,
-    AccountId,
-
-    near_bindgen,
-    PanicOnDefault,
-    BorshStorageKey,
+    PromiseOrValue, Promise, near_bindgen, PanicOnDefault, BorshStorageKey, AccountId,
     borsh::{self, BorshDeserialize, BorshSerialize}
 };
-use near_contract_standards::non_fungible_token::{metadata::NFTContractMetadata, NonFungibleToken, Token, TokenId};
+use near_contract_standards::non_fungible_token::NonFungibleToken;
+use near_contract_standards::non_fungible_token::{metadata::NFTContractMetadata, Token, TokenId};
 use near_contract_standards::non_fungible_token::metadata::{NFT_METADATA_SPEC, NonFungibleTokenMetadataProvider, TokenMetadata};
 use near_sdk::collections::LazyOption;
-use near_sdk::json_types::ValidAccountId;
 
-near_sdk::setup_alloc!();
 
 #[near_bindgen]
 #[derive(BorshDeserialize, BorshSerialize, PanicOnDefault)]
@@ -36,7 +28,7 @@ pub enum StorageKey {
 #[near_bindgen]
 impl Contract {
     #[init]
-    pub fn new(owner_id: ValidAccountId) -> Self {
+    pub fn new(owner_id: AccountId) -> Self {
         Self {
             token: NonFungibleToken::new(
                 StorageKey::NonFungibleToken,
@@ -64,10 +56,10 @@ impl Contract {
     pub fn nft_mint(
         &mut self,
         token_id: TokenId,
-        receiver_id: ValidAccountId,
+        receiver_id: AccountId,
         token_metadata: TokenMetadata,
     ) -> Token {
-        self.token.mint(token_id, receiver_id, Some(token_metadata))
+        self.token.internal_mint(token_id, receiver_id, Some(token_metadata))
     }
 }
 

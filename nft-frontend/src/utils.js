@@ -59,22 +59,13 @@ async function mintNFT(title, description, media) {
                 media:media,
             }
         },
-        attachedDeposit: new BN("10000000000000000000000")
+        attachedDeposit: new BN("10000000000000000000000"),
+        walletCallbackUrl: `http:/localhost:8080/?tokenId=${tokenId}`
     });
     if (functionCallResult && functionCallResult.transaction && functionCallResult.transaction.hash) {
         // Display a link the NEAR Explorer
         return [tokenId, functionCallResult.transaction.hash];
     }
-    // const provider = new nearAPI.providers.JsonRpcProvider(nearConfig.nodeUrl);
-    // const argsBase64 = window.btoa(JSON.stringify({name: name}))
-    // const rawResult = await provider.query({
-    //     request_type: "call_function",
-    //     finality: "final",
-    //     account_id: nearConfig.contractName,
-    //     method_name: "get_hello_message",
-    //     args_base64: argsBase64,
-    // }); // Base 58 of '{}'
-    // return JSON.parse(rawResult.result.map((x) => String.fromCharCode(x)).join(''));
 }
 
 export {

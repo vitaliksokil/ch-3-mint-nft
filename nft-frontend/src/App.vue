@@ -32,8 +32,8 @@
         <div class="card my-5" v-if="lastCreatedNftId && lastTransactionHash">
           <div class="card-body">
             <h5 class="card-title">Your last NFT and Transaction</h5>
-            <p class="card-text"><a :href='"https://wallet.testnet.near.org/nft-detail/" + window.nearAccount.accountId + "/" + lastCreatedNftId' target="_blank">See your last created NFT</a></p>
-            <p class="card-text"> <a :href='"https://explorer.testnet.near.org/transactions/" + lastTransactionHash' target="_blank">See your last transaction</a></p>
+            <p class="card-text"><a :href='getLastNftLink()' target="_blank">See your last created NFT</a></p>
+            <p class="card-text"> <a :href='getLastTransactionLink()' target="_blank">See your last transaction</a></p>
           </div>
         </div>
       </div>
@@ -85,18 +85,38 @@ export default {
         description:'',
         media:''
       };
-      this.lastTransactionHash = transactionHash;
-      this.lastCreatedNftId = nftId;
-      this.$swal.fire({
-        icon: 'success',
-        title: 'Success',
-        text: 'Your NFT has been created!',
-        footer: `<div class="d-flex justify-content-between w-100"><a href="https://wallet.testnet.near.org/nft-detail/${window.nearAccount.accountId}/${nftId}" target="_blank">See your NFT</a> <a href='https://explorer.testnet.near.org/transactions/${transactionHash}' target="_blank">See your transaction</a></div>`,
-      })
-    }
+      this.successMessage(nftId, transactionHash);
+    },
+    successMessage(nftId = null, transactionHash = null){
+      if (transactionHash && nftId){
+        this.lastTransactionHash = transactionHash;
+        this.lastCreatedNftId = nftId;
+        const lastNftLink = this.getLastNftLink();
+        const lastTransactionLink = this.getLastTransactionLink();
+        this.$swal.fire({
+          icon: 'success',
+          title: 'Success',
+          text: 'Your NFT has been created!',
+          footer: `<div class="d-flex justify-content-between w-100"><a href="${lastNftLink}" target="_blank">See your NFT</a> <a href='${lastTransactionLink}' target="_blank">See your transaction</a></div>`,
+        })
+        window.history.pushState({}, document.title, "/");
+      }
+    },
+    getLastNftLink(){
+      return "https://wallet.testnet.near.org/nft-detail/" + process.env.VUE_APP_CONTRACT_NAME + "/" + this.lastCreatedNftId;
+    },
+    getLastTransactionLink(){
+      return `https://explorer.testnet.near.org/transactions/${this.lastTransactionHash}`;
+    },
   },
   async mounted(){
     this.updateInfo();
+    let uri = window.location.search.substring(1);
+    let params = new URLSearchParams(uri);
+    const nftId = params.get('tokenId');
+    const transactionHash = params.get('transactionHashes');
+    this.successMessage(nftId,transactionHash);
+
   },
   components: {
     'header-comp':HeaderComp,
