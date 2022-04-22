@@ -2,6 +2,9 @@
   <div>
     <header-comp :is-signed-in="isSignedIn" :account-id="accountId"></header-comp>
     <div class="container py-4" >
+      <div class="text-center">
+        <img :src="getNftLink()" alt="" style="max-width: 50%;margin-left: auto" class="my-3">
+      </div>
       <div class="row" v-if="!isSignedIn">
         <div class="alert alert-danger my-5 text-center" role="alert">
           Please sign in with NEAR to continue!
@@ -107,6 +110,9 @@ export default {
     },
     getLastTransactionLink(){
       return `https://explorer.testnet.near.org/transactions/${this.lastTransactionHash}`;
+    },
+    getNftLink(){
+      return process.env.VUE_APP_NFT_URL;
     },
   },
   async mounted(){
