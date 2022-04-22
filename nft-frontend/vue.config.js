@@ -4,7 +4,7 @@ const webpack = require('webpack');
 
 module.exports = defineConfig({
     publicPath: process.env.VUE_APP_NODE_ENV === 'production'
-        ? '/'
+        ? '/ch-3-mint-nft/'
         : '/',
     transpileDependencies: true,
     css: {
