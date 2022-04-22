@@ -99,7 +99,7 @@ export default {
           text: 'Your NFT has been created!',
           footer: `<div class="d-flex justify-content-between w-100"><a href="${lastNftLink}" target="_blank">See your NFT</a> <a href='${lastTransactionLink}' target="_blank">See your transaction</a></div>`,
         })
-        window.history.pushState({}, document.title, "/");
+        window.history.pushState({}, document.title, process.env.VUE_APP_APP_URL);
       }
     },
     getLastNftLink(){

@@ -60,7 +60,7 @@ async function mintNFT(title, description, media) {
             }
         },
         attachedDeposit: new BN("10000000000000000000000"),
-        walletCallbackUrl: `http:/localhost:8080/?tokenId=${tokenId}`
+        walletCallbackUrl: process.env.VUE_APP_APP_URL + `/?tokenId=${tokenId}`
     });
     if (functionCallResult && functionCallResult.transaction && functionCallResult.transaction.hash) {
         // Display a link the NEAR Explorer
